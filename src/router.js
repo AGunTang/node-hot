@@ -7,6 +7,7 @@ Vue.use(VueRouter);
 // 导入组件
 import login from './components/login.vue';
 import index from './components/index.vue';
+import user from './components/user.vue';
 
 //定义路由规则
 let routes = [
@@ -17,6 +18,10 @@ let routes = [
     {
         path:'/',
         component:index,
+    },
+    {
+        path:'/user',
+        component:user,
     },
 ];
 

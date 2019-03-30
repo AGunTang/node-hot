@@ -1,18 +1,17 @@
 <template>
     <div>
-        <h1>首页</h1>
+        <h1>用户界面</h1>
     </div>
 </template>
 
 <script>
 export default {
-    name:'index',
+    name:'user',
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-
+<style >
 
 
 </style>
