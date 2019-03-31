@@ -20,17 +20,18 @@
       </el-col>
     </el-row>
     <!-- 表格 -->
-    <el-table :data="tableData" style="width: 100%">
-      <el-table-column prop="date" label="日期" width="180"></el-table-column>
-      <el-table-column prop="name" label="姓名" width="180"></el-table-column>
-      <el-table-column prop="address" label="地址"></el-table-column>
+    <el-table :data="userList" style="width: 100%">
+      <el-table-column prop="id" label="#" width="180"></el-table-column>
+      <el-table-column prop="username" label="姓名" width="180"></el-table-column>
+      <el-table-column prop="email" label="邮箱" width="180"></el-table-column>
+      <el-table-column prop="mobile" label="电话" width="180"></el-table-column>
     </el-table>
     <!-- 页码 -->
     <el-pagination
-      :page-sizes="[100, 200, 300, 400]"
-      :page-size="100"
+      :page-sizes="[10, 20, 30, 40]"
+      :page-size="pageData.pagesize"
       layout="total, sizes, prev, pager, next, jumper"
-      :total="400"
+      :total="total"
     ></el-pagination>
   </div>
 </template>
@@ -40,7 +41,13 @@ export default {
   name: "users",
   data() {
     return {
-      tableData: [
+      total:0,
+      pageData:{
+        query:'',
+        pagenum:1,
+        pagesize:10,
+      },
+      userList: [
         {
           date: "2016-05-02",
           name: "王小虎",
@@ -63,7 +70,18 @@ export default {
         }
       ]
     };
-  }
+  },
+  async created() {
+    //渲染用户列表
+    let res = await this.$axios.get('users',{
+      params:this.pageData,
+      headers:{
+        Authorization:window.sessionStorage.getItem('key')
+      },
+    })
+    console.log(res);
+    this.userList = res.data.data.users;
+  },
 };
 </script>
 
