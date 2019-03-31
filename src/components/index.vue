@@ -43,12 +43,21 @@
 <script>
 export default {
   name: "index",
+<<<<<<< HEAD
   methods: {
     logout(){
       //清除token
       window.sessionStorage.removeItem('key');
       //跳转到登录页
       this.$router.push('/login');
+=======
+  beforeCreate() {
+    if(window.sessionStorage.getItem('key')){
+
+    }else {
+      this.$router.push('/login');
+      this.$message.error('请登录');
+>>>>>>> dev
     }
   },
 };
