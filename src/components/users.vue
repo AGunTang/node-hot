@@ -20,11 +20,30 @@
       </el-col>
     </el-row>
     <!-- 表格 -->
-    <el-table :data="userList" style="width: 100%">
-      <el-table-column prop="id" label="#" width="180"></el-table-column>
+    <el-table :data="userList" border style="width: 100%">
+      <el-table-column type="index" label="#" width="180"></el-table-column>
       <el-table-column prop="username" label="姓名" width="180"></el-table-column>
       <el-table-column prop="email" label="邮箱" width="180"></el-table-column>
       <el-table-column prop="mobile" label="电话" width="180"></el-table-column>
+      <el-table-column prop="mg_state" label="用户状态" width="180">
+        <template slot-scope="scope">
+          <el-switch v-model="scope.row.mg_state" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+        </template>
+      </el-table-column>
+      <el-table-column prop="mobile" label="操作" width="180">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="primary"
+            @click="handleEdit(scope.$index, scope.row)"
+            plain
+            icon="el-icon-edit"
+            circle
+          ></el-button>
+          <el-button type="danger" size="mini" plain icon="el-icon-delete" circle></el-button>
+          <el-button type="warning" size="mini" plain icon="el-icon-check" circle></el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <!-- 页码 -->
     <el-pagination
@@ -41,11 +60,11 @@ export default {
   name: "users",
   data() {
     return {
-      total:0,
-      pageData:{
-        query:'',
-        pagenum:1,
-        pagesize:10,
+      total: 0,
+      pageData: {
+        query: "",
+        pagenum: 1,
+        pagesize: 10
       },
       userList: [
         {
@@ -71,17 +90,25 @@ export default {
       ]
     };
   },
+  methods: {
+    handleEdit(index,row){
+      console.log(index);
+      console.log(row);
+      
+      
+    }
+  },
   async created() {
     //渲染用户列表
-    let res = await this.$axios.get('users',{
-      params:this.pageData,
-      headers:{
-        Authorization:window.sessionStorage.getItem('key')
-      },
-    })
+    let res = await this.$axios.get("users", {
+      params: this.pageData,
+      headers: {
+        Authorization: window.sessionStorage.getItem("key")
+      }
+    });
     console.log(res);
     this.userList = res.data.data.users;
-  },
+  }
 };
 </script>
 
