@@ -11,7 +11,7 @@
 
     <el-row>
       <el-col :span="7">
-        <el-input placeholder="请输入内容" v-model="pageData.query" class="input-with-select">
+        <el-input placeholder="请输入内容" @keyup.native.enter="search" v-model="pageData.query" class="input-with-select">
           <el-button slot="append" @click="search" icon="el-icon-search"></el-button>
         </el-input>
       </el-col>
@@ -27,7 +27,7 @@
       <el-table-column prop="mobile" label="电话" width="180"></el-table-column>
       <el-table-column prop="mg_state" label="用户状态" width="180">
         <template slot-scope="scope">
-          <el-switch v-model="scope.row.mg_state" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+          <el-switch @change="updata(scope.row)" v-model="scope.row.mg_state" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
         </template>
       </el-table-column>
       <el-table-column prop="mobile" label="操作" width="180">
@@ -66,28 +66,7 @@ export default {
         pagenum: 1,
         pagesize: 10
       },
-      userList: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄"
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄"
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄"
-        }
-      ]
+      userList: [],
     };
   },
   methods: {
@@ -99,12 +78,15 @@ export default {
       //渲染用户列表
       let res = await this.$axios.get("users", {
         params: this.pageData,
-        headers: {
-          Authorization: window.sessionStorage.getItem("key")
-        }
+
       });
       console.log(res);
       this.userList = res.data.data.users;
+    },
+    async updata(row){
+      let res = await this.$axios.put(`users/${row.id}/state/${row.mg_state}`)
+      console.log(res);
+      
     }
   },
   created() {
