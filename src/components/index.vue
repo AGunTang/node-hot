@@ -15,10 +15,7 @@
     </el-header>
     <el-container class="container">
       <el-aside width="200px" class="aside">
-        <el-menu router
-          default-active="2"
-          class="el-menu-vertical-demo"
-       >
+        <el-menu router default-active="2" class="el-menu-vertical-demo">
           <el-submenu index="1">
             <template slot="title">
               <i class="el-icon-location"></i>
@@ -33,8 +30,7 @@
         </el-menu>
       </el-aside>
       <el-main class="main">
-          
-          <router-view></router-view>
+        <router-view></router-view>
       </el-main>
     </el-container>
   </el-container>
@@ -43,23 +39,21 @@
 <script>
 export default {
   name: "index",
-<<<<<<< HEAD
-  methods: {
-    logout(){
-      //清除token
-      window.sessionStorage.removeItem('key');
-      //跳转到登录页
-      this.$router.push('/login');
-=======
   beforeCreate() {
-    if(window.sessionStorage.getItem('key')){
-
-    }else {
-      this.$router.push('/login');
-      this.$message.error('请登录');
->>>>>>> dev
+    if (window.sessionStorage.getItem("key")) {
+    } else {
+      this.$router.push("/login");
+      this.$message.error("请登录");
     }
   },
+  methods: {
+    logout() {
+      //清除token
+      window.sessionStorage.removeItem("key");
+      //跳转到登录页
+      this.$router.push("/login");
+    }
+  }
 };
 </script>
 
