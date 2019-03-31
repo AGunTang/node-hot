@@ -42,7 +42,15 @@
 
 <script>
 export default {
-  name: "index"
+  name: "index",
+  beforeCreate() {
+    if(window.sessionStorage.getItem('key')){
+
+    }else {
+      this.$router.push('/login');
+      this.$message.error('请登录');
+    }
+  },
 };
 </script>
 
