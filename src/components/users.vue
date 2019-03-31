@@ -11,8 +11,8 @@
 
     <el-row>
       <el-col :span="7">
-        <el-input placeholder="请输入内容" class="input-with-select">
-          <el-button slot="append" icon="el-icon-search"></el-button>
+        <el-input placeholder="请输入内容" v-model="pageData.query" class="input-with-select">
+          <el-button slot="append" @click="search" icon="el-icon-search"></el-button>
         </el-input>
       </el-col>
       <el-col :span="7">
@@ -91,23 +91,24 @@ export default {
     };
   },
   methods: {
-    handleEdit(index,row){
+    handleEdit(index, row) {
       console.log(index);
       console.log(row);
-      
-      
+    },
+    async search() {
+      //渲染用户列表
+      let res = await this.$axios.get("users", {
+        params: this.pageData,
+        headers: {
+          Authorization: window.sessionStorage.getItem("key")
+        }
+      });
+      console.log(res);
+      this.userList = res.data.data.users;
     }
   },
-  async created() {
-    //渲染用户列表
-    let res = await this.$axios.get("users", {
-      params: this.pageData,
-      headers: {
-        Authorization: window.sessionStorage.getItem("key")
-      }
-    });
-    console.log(res);
-    this.userList = res.data.data.users;
+  created() {
+    this.search();
   }
 };
 </script>
