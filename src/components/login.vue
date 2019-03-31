@@ -9,8 +9,8 @@
         label-position="top"
         label-width="80px"
       >
-        <el-form-item label="用户名" prop="name">
-          <el-input v-model="ruleForm.name"></el-input>
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="ruleForm.username"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
           <el-input v-model="ruleForm.password"></el-input>
@@ -31,16 +31,16 @@ export default {
     return {
       ruleForm: {
         password: "",
-        name: ""
+        username: ""
       },
       rules: {
-        name: [
+        username: [
           { required: true, message: "请输入用户名", trigger: "blur" },
           { min: 3, max: 10, message: "长度3到10个字符", trigger: "blur" }
         ],
         password: [
           { required: true, message: "请输入密码", trigger: "blur" },
-          { min: 6, max: 16, message: "长度6到16个字符", trigger: "blur" }
+          { min: 4, max: 16, message: "长度6到16个字符", trigger: "blur" }
         ]
       }
     };
@@ -48,9 +48,23 @@ export default {
   methods: {
     //提交按钮事件
     submitForm(formName) {
-      this.$refs[formName].validate(valid => {
+      //async 此函数作为异步操作
+      this.$refs[formName].validate(async valid => {
         if (valid) {
-          //判断成功
+          //判断成功发送axios
+          let res = await this.$axios.post('login',this.ruleForm);
+          console.log(res);
+          if(res.data.meta.status==200){
+            this.$message.success('登录成功');
+            //存入token
+            window.sessionStorage.setItem('key',res.data.data.token);
+            //跳转到首页
+            this.$router.push('/');
+          } else {
+            this.$message.error('登录失败');
+
+          }
+          
         } else {
           //判断失败
           this.$message.error("填写有误");

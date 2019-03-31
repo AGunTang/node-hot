@@ -9,7 +9,7 @@
           <h2>后台管理系统</h2>
         </el-col>
         <el-col :span="2">
-          <el-button type="danger">退出</el-button>
+          <el-button type="danger" @click="logout">退出</el-button>
         </el-col>
       </el-row>
     </el-header>
@@ -42,7 +42,15 @@
 
 <script>
 export default {
-  name: "index"
+  name: "index",
+  methods: {
+    logout(){
+      //清除token
+      window.sessionStorage.removeItem('key');
+      //跳转到登录页
+      this.$router.push('/login');
+    }
+  },
 };
 </script>
 
