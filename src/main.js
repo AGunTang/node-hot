@@ -12,6 +12,10 @@ Vue.use(ElementUI);
 //导入全局通用样式
 import "./assets/css/base.scss";
 
+/* 面包屑组件 */
+import breads from './components/breads.vue';
+Vue.component('bread',breads)
+
 //导入axios
 import axios from "axios";
 //设置给vue原型

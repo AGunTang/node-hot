@@ -15,15 +15,15 @@
     </el-header>
     <el-container class="container">
       <el-aside width="200px" class="aside">
-        <el-menu router default-active="2" class="el-menu-vertical-demo">
-          <el-submenu index="1">
+        <el-menu router default-active="/users" class="el-menu-vertical-demo">
+          <el-submenu :index="index+''" v-for="(item,index) in menuList" :key="index">
             <template slot="title">
               <i class="el-icon-location"></i>
-              <span>一级导航</span>
+              <span>{{ item.authName }}</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="/users">
-                <span class="el-icon-menu"></span> 二级导航
+              <el-menu-item :index="'/'+it.path" v-for="(it,ind) in item.children" :key="ind">
+                <span class="el-icon-menu"></span> {{ it.authName }}
               </el-menu-item>
             </el-menu-item-group>
           </el-submenu>
@@ -39,6 +39,15 @@
 <script>
 export default {
   name: "index",
+  data(){
+    return {
+      menuList:[],
+    }
+  },
+  async created() {
+    let res = await this.$axios.get('menus')
+    this.menuList = res.data.data
+  },
   beforeCreate() {
     if (window.sessionStorage.getItem("key")) {
     } else {

@@ -1,12 +1,7 @@
 <template>
   <div>
     <!-- 面包屑 -->
-    <el-breadcrumb class="breadcrumb" separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>活动管理</el-breadcrumb-item>
-      <el-breadcrumb-item>活动列表</el-breadcrumb-item>
-      <el-breadcrumb-item>活动详情</el-breadcrumb-item>
-    </el-breadcrumb>
+      <bread sectitle="用户管理" threetitle="用户列表"></bread>
     <!-- 输入框 -->
 
     <el-row>
@@ -50,8 +45,22 @@
             icon="el-icon-edit"
             circle
           ></el-button>
-          <el-button type="danger" @click="delUser(scope.row)" size="mini" plain icon="el-icon-delete" circle></el-button>
-          <el-button type="warning" size="mini" plain icon="el-icon-check" circle></el-button>
+          <el-button
+            type="danger"
+            @click="delUser(scope.row)"
+            size="mini"
+            plain
+            icon="el-icon-delete"
+            circle
+          ></el-button>
+          <el-button
+            type="warning"
+            size="mini"
+            @click="upRoleUser(scope.row)"
+            plain
+            icon="el-icon-check"
+            circle
+          ></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -61,10 +70,12 @@
       :page-size="pageData.pagesize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
+      @size-change="sizeChange"
+      @current-change="currentChange"
     ></el-pagination>
 
     <!-- 新增用户弹框 -->
-    <el-dialog title="提示" :visible.sync="addUser" width="30%" :before-close="handleClose">
+    <el-dialog title="新增用户" :visible.sync="addUser" width="30%" :before-close="handleClose">
       <el-form
         :model="addForm"
         :rules="rules"
@@ -94,7 +105,7 @@
     </el-dialog>
 
     <!-- 编辑用户弹框 -->
-    <el-dialog title="提示" :visible.sync="editUser" width="30%">
+    <el-dialog title="编辑用户" :visible.sync="editUser" width="30%">
       <el-form :model="editForm" ref="editForm" label-width="100px" class="demo-ruleForm">
         <el-form-item label="用户名" prop="username">
           <el-input v-model="editForm.username" disabled></el-input>
@@ -109,6 +120,28 @@
         <el-form-item>
           <el-button @click="editUser = false">取 消</el-button>
           <el-button type="primary" @click="addEditForm('editForm')">确 定</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+
+    <!-- 编辑用户权限弹框 -->
+    <el-dialog title="权限设置" :visible.sync="roleUser" width="30%">
+      <el-form :model="roleRow" ref="roleForm" label-width="100px" class="demo-ruleForm">
+        <el-form-item label="当前用户" prop="username">{{roleRow.username}}</el-form-item>
+        <el-form-item label="请选择角色">
+          <el-select v-model="roleRow.role_name" placeholder="请选择">
+            <el-option
+              v-for="item in roleList"
+              :key="item.id"
+              :label="item.roleDesc"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item>
+          <el-button @click="roleUser = false">取 消</el-button>
+          <el-button type="primary" @click="roleEditForm('roleForm')">确 定</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -153,11 +186,27 @@ export default {
         username: "",
         email: "",
         mobile: "",
-        id:'',
-      }
+        id: ""
+      },
+      //编辑用户权限id
+      roleRow: {},
+      //权限修改是否弹框
+      roleUser: false,
+      roleForm: {},
+      //权限列表
+      roleList: []
     };
   },
   methods: {
+    //分页功能
+    async sizeChange(size) {
+      this.pageData.pagesize = size;
+      this.search();
+    },
+    async currentChange(current) {
+      this.pageData.pagenum = current;
+      this.search();
+    },
     handleEdit(index, row) {
       //开启编辑弹框
       this.editUser = true;
@@ -175,11 +224,11 @@ export default {
           //关闭窗口
           this.editUser = false;
           //发送请求
-          let res = await this.$axios.put(`users/${this.editForm.id}`,{
-            id:this.editForm.id,
-            email:this.editForm.email,
-            mobile:this.editForm.mobile
-          } );
+          let res = await this.$axios.put(`users/${this.editForm.id}`, {
+            id: this.editForm.id,
+            email: this.editForm.email,
+            mobile: this.editForm.mobile
+          });
           console.log(res);
           //判断响应状态
           if (res.data.meta.status == 200) {
@@ -199,6 +248,8 @@ export default {
       let res = await this.$axios.get("users", {
         params: this.pageData
       });
+      this.total = res.data.data.total;
+      this.pageData.pagenum = res.data.data.pagenum;
       this.userList = res.data.data.users;
     },
     async updata(row) {
@@ -237,16 +288,46 @@ export default {
         .catch(_ => {});
     },
     //删除用户
-    async delUser(row){
-      let res = await this.$axios.delete(`users/${row.id}`)
+    async delUser(row) {
+      let res = await this.$axios.delete(`users/${row.id}`);
       console.log(res);
-      if(res.data.meta.status==200){
+      if (res.data.meta.status == 200) {
         //刷新页面
-        this.search()
+        this.search();
       } else {
         this.$message.error(res.data.meta.msg);
       }
-
+    },
+    //用户权限编辑
+    async upRoleUser(row) {
+      console.log(row);
+      //开启弹框
+      this.roleUser = true;
+      //绑定用户id
+      this.roleRow = row;
+      //查询权限列表
+      let res = await this.$axios.get("roles");
+      this.roleList = res.data.data;
+    },
+    //权限修改提交
+    async roleEditForm(formName) {
+      // 关闭窗口
+      this.roleUser = false;
+      this.$refs[formName].validate(async valid => {
+        if (valid) {
+          //判断是否修改
+          if (typeof this.roleRow.role_name == "number") {
+            let res = await this.$axios.put(`users/${this.roleRow.id}/role`, {
+              rid: this.roleRow.role_name
+            });
+            // 刷新页面
+            this.search();
+          }
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
     }
   },
   created() {
@@ -257,10 +338,5 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang='scss'>
-.breadcrumb {
-  height: 50px;
-  background-color: #d3dce6;
-  line-height: 50px;
-  padding-left: 15px;
-}
+
 </style>
