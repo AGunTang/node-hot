@@ -33,7 +33,7 @@
         </el-table>
       </el-tab-pane>
       <el-tab-pane label="静态参数" name="second">
-        <el-button disabled class="my-btn" type="primary">添加静态参数</el-button>
+                <el-button disabled class="my-btn" type="primary">添加静态参数</el-button>
         <!-- 表格 -->
         <el-table :data="parList" border style="width: 100%">
           <el-table-column type="index" label="#" width="180"></el-table-column>
@@ -343,6 +343,7 @@ export default {
 
 <style scoped lang='scss'>
 .my-content {
+
   .my-warning {
     margin-top: 20px;
   }
