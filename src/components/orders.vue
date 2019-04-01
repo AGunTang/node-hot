@@ -14,9 +14,9 @@
         <template slot-scope="scope">
           <el-button
             size="mini"
-            type="primary"
             @click="handleEdit(scope.$index, scope.row)"
             plain
+            type="primary"
             icon="el-icon-edit"
             circle
           ></el-button>
