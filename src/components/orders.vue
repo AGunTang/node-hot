@@ -1,38 +1,15 @@
 <template>
   <div>
     <!-- 面包屑 -->
-      <bread sectitle="用户管理" threetitle="用户列表"></bread>
-    <!-- 输入框 -->
-    <el-row>
-      <el-col :span="7">
-        <el-input
-          placeholder="请输入内容"
-          @keyup.native.enter="search"
-          v-model="pageData.query"
-          class="input-with-select"
-        >
-          <el-button slot="append" @click="search" icon="el-icon-search"></el-button>
-        </el-input>
-      </el-col>
-      <el-col :span="7">
-        <el-button type="success" @click="addUser=true" plain>添加用户</el-button>
-      </el-col>
-    </el-row>
+      <bread sectitle="订单管理" threetitle="订单列表"></bread>
     <!-- 表格 -->
     <el-table :data="userList" border style="width: 100%">
       <el-table-column type="index" label="#" width="180"></el-table-column>
-      <el-table-column prop="username" label="姓名" width="180"></el-table-column>
-      <el-table-column prop="email" label="邮箱" width="180"></el-table-column>
-      <el-table-column prop="mobile" label="电话" width="180"></el-table-column>
-      <el-table-column prop="mg_state" label="用户状态" width="180">
-        <template slot-scope="scope">
-          <el-switch
-            @change="updata(scope.row)"
-            v-model="scope.row.mg_state"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-          ></el-switch>
-        </template>
+      <el-table-column prop="username" label="订单编号" width="180"></el-table-column>
+      <el-table-column prop="email" label="订单价格" width="180"></el-table-column>
+      <el-table-column prop="mobile" label="是否付款" width="180"></el-table-column>
+      <el-table-column prop="mg_state" label="是否发货" width="180">
+      <el-table-column prop="mg_state" label="下单时间" width="180">
       </el-table-column>
       <el-table-column prop="mobile" label="操作" width="180">
         <template slot-scope="scope">
@@ -42,22 +19,6 @@
             @click="handleEdit(scope.$index, scope.row)"
             plain
             icon="el-icon-edit"
-            circle
-          ></el-button>
-          <el-button
-            type="danger"
-            @click="delUser(scope.row)"
-            size="mini"
-            plain
-            icon="el-icon-delete"
-            circle
-          ></el-button>
-          <el-button
-            type="warning"
-            size="mini"
-            @click="upRoleUser(scope.row)"
-            plain
-            icon="el-icon-check"
             circle
           ></el-button>
         </template>

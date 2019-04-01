@@ -16,12 +16,12 @@ import "./assets/css/base.scss";
 import breads from './components/breads.vue';
 Vue.component('bread',breads)
 
-//导入axios
+
+/* 导入axios */
 import axios from "axios";
 //设置给vue原型
 Vue.prototype.$axios = axios;
-
-/* 设置axios拦截器 */
+//设置axios拦截器 
 //请求拦截
 axios.interceptors.request.use(
   function(config) {

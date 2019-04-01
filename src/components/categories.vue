@@ -1,39 +1,19 @@
 <template>
   <div>
     <!-- 面包屑 -->
-      <bread sectitle="用户管理" threetitle="用户列表"></bread>
+      <bread sectitle="商品管理" threetitle="商品分类"></bread>
     <!-- 输入框 -->
     <el-row>
+
       <el-col :span="7">
-        <el-input
-          placeholder="请输入内容"
-          @keyup.native.enter="search"
-          v-model="pageData.query"
-          class="input-with-select"
-        >
-          <el-button slot="append" @click="search" icon="el-icon-search"></el-button>
-        </el-input>
-      </el-col>
-      <el-col :span="7">
-        <el-button type="success" @click="addUser=true" plain>添加用户</el-button>
+        <el-button type="success" @click="addUser=true" plain>添加分类</el-button>
       </el-col>
     </el-row>
     <!-- 表格 -->
     <el-table :data="userList" border style="width: 100%">
-      <el-table-column type="index" label="#" width="180"></el-table-column>
-      <el-table-column prop="username" label="姓名" width="180"></el-table-column>
-      <el-table-column prop="email" label="邮箱" width="180"></el-table-column>
-      <el-table-column prop="mobile" label="电话" width="180"></el-table-column>
-      <el-table-column prop="mg_state" label="用户状态" width="180">
-        <template slot-scope="scope">
-          <el-switch
-            @change="updata(scope.row)"
-            v-model="scope.row.mg_state"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-          ></el-switch>
-        </template>
-      </el-table-column>
+      <el-table-column prop="username" label="分类名称" width="180"></el-table-column>
+      <el-table-column prop="email" label="级别" width="180"></el-table-column>
+      <el-table-column prop="mobile" label="是否有效" width="180"></el-table-column>
       <el-table-column prop="mobile" label="操作" width="180">
         <template slot-scope="scope">
           <el-button
@@ -52,14 +32,6 @@
             icon="el-icon-delete"
             circle
           ></el-button>
-          <el-button
-            type="warning"
-            size="mini"
-            @click="upRoleUser(scope.row)"
-            plain
-            icon="el-icon-check"
-            circle
-          ></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -73,77 +45,6 @@
       @current-change="currentChange"
     ></el-pagination>
 
-    <!-- 新增用户弹框 -->
-    <el-dialog title="新增用户" :visible.sync="addUser" width="30%" :before-close="handleClose">
-      <el-form
-        :model="addForm"
-        :rules="rules"
-        ref="addForm"
-        label-width="100px"
-        class="demo-ruleForm"
-      >
-        <el-form-item label="用户名" prop="username">
-          <el-input v-model="addForm.username"></el-input>
-        </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="addForm.password"></el-input>
-        </el-form-item>
-        <el-form-item label="邮箱">
-          <el-input v-model="addForm.email"></el-input>
-        </el-form-item>
-        <el-form-item label="手机">
-          <el-input v-model="addForm.mobile"></el-input>
-        </el-form-item>
-
-        <el-form-item>
-          <el-button @click="addUser = false">取 消</el-button>
-          <el-button type="primary" @click="submitForm('addForm')">确 定</el-button>
-          <el-button @click="resetForm('addForm')">重置</el-button>
-        </el-form-item>
-      </el-form>
-    </el-dialog>
-
-    <!-- 编辑用户弹框 -->
-    <el-dialog title="编辑用户" :visible.sync="editUser" width="30%">
-      <el-form :model="editForm" ref="editForm" label-width="100px" class="demo-ruleForm">
-        <el-form-item label="用户名" prop="username">
-          <el-input v-model="editForm.username" disabled></el-input>
-        </el-form-item>
-        <el-form-item label="邮箱">
-          <el-input v-model="editForm.email"></el-input>
-        </el-form-item>
-        <el-form-item label="手机">
-          <el-input v-model="editForm.mobile"></el-input>
-        </el-form-item>
-
-        <el-form-item>
-          <el-button @click="editUser = false">取 消</el-button>
-          <el-button type="primary" @click="addEditForm('editForm')">确 定</el-button>
-        </el-form-item>
-      </el-form>
-    </el-dialog>
-
-    <!-- 编辑用户权限弹框 -->
-    <el-dialog title="权限设置" :visible.sync="roleUser" width="30%">
-      <el-form :model="roleRow" ref="roleForm" label-width="100px" class="demo-ruleForm">
-        <el-form-item label="当前用户" prop="username">{{roleRow.username}}</el-form-item>
-        <el-form-item label="请选择角色">
-          <el-select v-model="roleRow.role_name" placeholder="请选择">
-            <el-option
-              v-for="item in roleList"
-              :key="item.id"
-              :label="item.roleDesc"
-              :value="item.id"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-form-item>
-          <el-button @click="roleUser = false">取 消</el-button>
-          <el-button type="primary" @click="roleEditForm('roleForm')">确 定</el-button>
-        </el-form-item>
-      </el-form>
-    </el-dialog>
   </div>
 </template>
 

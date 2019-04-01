@@ -13,9 +13,9 @@
         </el-col>
       </el-row>
     </el-header>
-    <el-container class="container">
+    <el-container class="container" >
       <el-aside width="200px" class="aside">
-        <el-menu router default-active="/users" class="el-menu-vertical-demo">
+        <el-menu unique-opened router default-active="/users" class="el-menu-vertical-demo">
           <el-submenu :index="index+''" v-for="(item,index) in menuList" :key="index">
             <template slot="title">
               <i class="el-icon-location"></i>

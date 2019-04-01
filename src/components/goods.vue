@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 面包屑 -->
-      <bread sectitle="用户管理" threetitle="用户列表"></bread>
+      <bread sectitle="商品管理" threetitle="商品列表"></bread>
     <!-- 输入框 -->
     <el-row>
       <el-col :span="7">
@@ -15,24 +15,16 @@
         </el-input>
       </el-col>
       <el-col :span="7">
-        <el-button type="success" @click="addUser=true" plain>添加用户</el-button>
+        <el-button type="success" @click="addUser=true" plain>添加商品</el-button>
       </el-col>
     </el-row>
     <!-- 表格 -->
     <el-table :data="userList" border style="width: 100%">
       <el-table-column type="index" label="#" width="180"></el-table-column>
-      <el-table-column prop="username" label="姓名" width="180"></el-table-column>
-      <el-table-column prop="email" label="邮箱" width="180"></el-table-column>
-      <el-table-column prop="mobile" label="电话" width="180"></el-table-column>
-      <el-table-column prop="mg_state" label="用户状态" width="180">
-        <template slot-scope="scope">
-          <el-switch
-            @change="updata(scope.row)"
-            v-model="scope.row.mg_state"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-          ></el-switch>
-        </template>
+      <el-table-column prop="username" label="商品名称" width="180"></el-table-column>
+      <el-table-column prop="email" label="商品价格（元）" width="180"></el-table-column>
+      <el-table-column prop="mobile" label="商品重量" width="180"></el-table-column>
+      <el-table-column prop="mg_state" label="创建时间" width="180">
       </el-table-column>
       <el-table-column prop="mobile" label="操作" width="180">
         <template slot-scope="scope">
@@ -50,14 +42,6 @@
             size="mini"
             plain
             icon="el-icon-delete"
-            circle
-          ></el-button>
-          <el-button
-            type="warning"
-            size="mini"
-            @click="upRoleUser(scope.row)"
-            plain
-            icon="el-icon-check"
             circle
           ></el-button>
         </template>
