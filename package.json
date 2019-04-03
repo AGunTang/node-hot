@@ -1,6 +1,6 @@
 {
-  "name": "manager",
-  "version": "0.1.0",
+  "name": "a",
+  "version": "a",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -10,6 +10,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "echarts": "^4.2.1",
+    "v-distpicker": "^1.2.0",
     "vue": "^2.6.6",
     "vue-router": "^3.0.2"
   },
@@ -47,5 +48,10 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "description": "a",
+  "main": "-y",
+  "repository": "https://github.com/SmallHorseBrute/manager.git",
+  "author": "SmallHorseBrute <1778636186@qq.com>",
+  "license": "MIT"
 }

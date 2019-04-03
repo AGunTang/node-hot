@@ -15,7 +15,7 @@
     </el-header>
     <el-container class="container" >
       <el-aside width="200px" class="aside">
-        <el-menu unique-opened router default-active="/users" class="el-menu-vertical-demo">
+        <el-menu unique-opened router :default-active="defaultActive" class="el-menu-vertical-demo">
           <el-submenu :index="index+''" v-for="(item,index) in menuList" :key="index">
             <template slot="title">
               <i class="el-icon-location"></i>
@@ -42,18 +42,17 @@ export default {
   data(){
     return {
       menuList:[],
+      //当前路径
+      defaultActive:'',
     }
   },
   async created() {
     let res = await this.$axios.get('menus')
     this.menuList = res.data.data
+    this.defaultActive = this.$route.path
   },
   beforeCreate() {
-    if (window.sessionStorage.getItem("key")) {
-    } else {
-      this.$router.push("/login");
-      this.$message.error("请登录");
-    }
+ 
   },
   methods: {
     logout() {

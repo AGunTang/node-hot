@@ -16,11 +16,21 @@ import categories from "./components/categories.vue";
 import orders from "./components/orders.vue";
 import reports from "./components/reports.vue";
 
+//统一错误页
+import error from "./components/error.vue";
+
 //定义路由规则
 let routes = [
   {
     path: "/login",
-    component: login
+    component: login,
+    meta:{
+      noLogin:true,
+    }
+  },
+  {
+    path: "/error",
+    component: error,
   },
   {
     path: "/",
@@ -69,5 +79,37 @@ let routes = [
 let router = new VueRouter({
   routes
 });
+
+
+// 设置全局守卫
+router.beforeEach((to,from,next)=>{
+  // console.log(to);
+  //判断用户是否输入有效路径
+  if(to.matched.length===0){
+    //提示用户
+    Vue.prototype.$message.warning('找不到了')
+    //跳转到错误页
+    // router.push('/error')
+    next('/error')
+    // console.log(this);
+    
+    return ;
+  }
+  
+  
+  
+  if(to.meta.noLogin){//如果去登录页，就往下执行
+    next()
+  }else if (window.sessionStorage.getItem("key")) {
+
+    next()//如果有token就往下执行
+  } else {
+    //没有跳到登录页
+    next({
+      path:'/login'
+    })
+    Vue.prototype.$message.error("请先登录");
+  }
+})
 
 export default router;
