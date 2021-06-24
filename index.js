@@ -4,9 +4,7 @@ const webpackDevMiddleware = require('koa-webpack-dev-middleware')
 const webpackHotMiddleware = require('koa-webpack-hot-middleware')
 const config = require('./config/webpack')
 const koaStatic = require('koa-static');
-config.mode = 'production'
 const compiler = webpack(config);
-console.log("compiler", compiler.plugin)
 
 const app = new Koa()
 const wdm = webpackDevMiddleware(compiler, {

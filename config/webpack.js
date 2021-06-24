@@ -43,13 +43,6 @@ module.exports = {
         }
       },
       {
-        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
-        loader: 'url-loader',
-        options: {
-          limit: 10000,
-        }
-      },
-      {
         test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
         loader: 'url-loader',
         options: {
@@ -74,7 +67,14 @@ module.exports = {
       },
       {
         test: /\.(png|jpg|gif|jpeg|webp)$/,
-        use: 'file-loader?name=[path][name].[ext]',
+        use: {
+          loader: 'file-loader',
+          options: {
+            limit: 10,
+            esModule: false,
+            name: '[path][name].[ext]',
+          },
+        },
       },
     ]
   },
